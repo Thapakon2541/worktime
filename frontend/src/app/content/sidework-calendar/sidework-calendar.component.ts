@@ -53,7 +53,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
   empDate: Date;
   eventDateClick: Date;
   calendarDate: Date;
-
+  
   constructor(
     private dialog: MatDialog,
     private messageService: MessageService,
@@ -75,13 +75,11 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     this.calendarDate = date;
 
     const holidayMonth = this.calendarDate.getMonth() + 1;
-    const holidayYear = this.calendarDate.getFullYear();
-
-    const leaveYear = this.calendarDate.getFullYear();
+    const holidayYear = this.calendarDate.getUTCFullYear();
+    const leaveYear = this.calendarDate.getUTCFullYear();
 
     localStorage.setItem("month", holidayMonth.toString());
     localStorage.setItem("year", holidayYear.toString());
-
     localStorage.setItem("year", leaveYear.toString());
 
     this.holidaysEventService();
@@ -140,7 +138,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       defaultView: 'dayGridMonth',
       displayEventTime: false,
       header: {
-        left: 'today',
+        left: 'today,dayGridMonth,timeGridWeek,timeGridDay',
         center: 'title',
         right: 'prev, next',
       },
@@ -210,12 +208,12 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         event.workAnyWhere === 3 ? 'RebeccaPurple' : event.workAnyWhere === 0 ? 'Maroon': 
         event.title.includes("ลา")?'Orange': ' rgb(243, 127, 127)',
         textColor: event.workAnyWhere === 1 ? 'Azure' : event.workAnyWhere === 2 ? 'Azure' :
-        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : 
-        event.title.includes("ลา")?'Black':'Black'
+        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : event.title.includes("ลา")?'Black':'Black'
       };
     });
   }
 
+  
   LoadAllEventsOnCalendar() {
     
     // โหลด sidework event ขึ้นบน calendar
@@ -346,6 +344,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
           });
         }
       );
+
   }
 
   opendialogShowEmp(type: string) {
@@ -356,6 +355,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     };
     const dialogRef = this.dialog.open(SideWorkComponent, configDialog);
     dialogRef.afterClosed().subscribe();
+
   }
 
   openDialogEdit(type: string, itemSideWork: SideWork) {
@@ -411,15 +411,19 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     }
    // console.log(requestData)
    // console.log(Subject)
-
-  
   }
+
+
  // Get leaveEmployee จ่าก webService
   leaveEmployeeEventService() {
     const requestData = {
         ...Subject,
         employeeNo: localStorage.getItem('employeeNo'),
         leaveYear: localStorage.getItem('year')
+      }
+      if (requestData.employeeNo == '004061' || requestData.employeeNo == '001153' || requestData.employeeNo == '000242'
+      || requestData.employeeNo == '000168' || requestData.employeeNo == '000225' || requestData.employeeNo == '004912') {
+      this.leaveEmployee = true;
       }
      // console.log(requestData)
   

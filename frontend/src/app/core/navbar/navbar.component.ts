@@ -10,6 +10,7 @@ import { EmployeeService } from "src/app/shared/service/employee.service";
 })
 export class NavbarComponent implements OnInit {
   showToggle: boolean = false;
+  hideToggle: boolean = false;
   employee: Employee;
 
   constructor(
@@ -21,10 +22,13 @@ export class NavbarComponent implements OnInit {
     this.employeeService
       .getEmployeeSignOn()
       .subscribe(res => (this.employee = { ...res }));
+  
   }
-
+  
   signOut(): void {
     this.authService.onSignout();
+    this.showToggle = null;
+
   }
 
   @HostListener("window:scroll", ["$event"])
