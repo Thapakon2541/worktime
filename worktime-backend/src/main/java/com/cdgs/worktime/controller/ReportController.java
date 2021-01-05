@@ -171,11 +171,9 @@ public class ReportController {
 				
 				
 
-		String Employee = "SELECT employee_no, firstname, lastname, id_employee \r\n" + 
-				"FROM employee\r\n" + 
-				"WHERE employee_no NOT LIKE 't%'\r\n" +
-				"	\r\n" + 
-				"ORDER BY employee_no ASC";
+		String Employee = "SELECT employee_no, firstname, lastname, id_employee \r\n"
+				+ "FROM employee where active = 'Y' \r\n"
+				+ "ORDER BY employee_no ASC";
 
 		java.sql.Statement calendarStatement = connect.createStatement();
 		java.sql.Statement nameStatement = connect.createStatement();
@@ -217,7 +215,18 @@ public class ReportController {
 		cellHeaderStyle.setAlignment(HorizontalAlignment.CENTER);
 		cellHeaderStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		cellHeaderStyle.setFont(headerFont);
-
+		
+		// EmpStyle
+		// Header style
+				CellStyle cellEmpNoStyle = workbook.createCellStyle();
+				cellEmpNoStyle.cloneStyleFrom(border);
+				cellEmpNoStyle.setAlignment(HorizontalAlignment.CENTER);
+				cellEmpNoStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+				
+		
+		
+		
+		
 		// Body style
 		CellStyle workTimesStyle = workbook.createCellStyle();
 		workTimesStyle.cloneStyleFrom(border);
@@ -294,8 +303,8 @@ public class ReportController {
 			ResultSet getName = nameStatement.executeQuery(Employee);
 
 			// Set width column index 0
-			sidework.setColumnWidth(0, 20 * 256);
-
+			sidework.setColumnWidth(0, 15 * 200);
+			sidework.setColumnWidth(1, 25 * 260);
 			int row = 0;
 
 			int[] sumDay29 = new int[dayOfMonth29[indexOfMonth] + 1];
@@ -312,10 +321,15 @@ public class ReportController {
 			if (getCalendar.next()) {
 				Row dateRow = sidework.createRow(1);
 				Row dayNameRow = sidework.createRow(0);
-
 				sidework.addMergedRegion(new CellRangeAddress(0, 1, 0, 0));
-				Cell nameHCellR00 = dateRow.createCell(0);
-				Cell nameHCellR01 = dayNameRow.createCell(0);
+				Cell empNoCellR00 = dateRow.createCell(0);
+				Cell empNoCellR01 = dayNameRow.createCell(0);
+				empNoCellR01.setCellValue("รหัส");
+				empNoCellR01.setCellStyle(cellHeaderStyle);
+				empNoCellR00.setCellStyle(cellHeaderStyle);
+				sidework.addMergedRegion(new CellRangeAddress(0, 1, 1, 1));
+				Cell nameHCellR00 = dateRow.createCell(1);
+				Cell nameHCellR01 = dayNameRow.createCell(1);
 				nameHCellR01.setCellValue("ชื่อ");
 				nameHCellR01.setCellStyle(cellHeaderStyle);
 				nameHCellR00.setCellStyle(cellHeaderStyle);
@@ -331,9 +345,9 @@ public class ReportController {
 						int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 						String nameOfDay = "";
 
-						Cell dayNameCell = dayNameRow.createCell(i + 1);
+						Cell dayNameCell = dayNameRow.createCell(i + 2);
 
-						Cell dayCell = dateRow.createCell(i + 1);
+						Cell dayCell = dateRow.createCell(i + 2);
 						dayCell.setCellValue(i + 1);
 
 						if (dayOfWeek == 1) {
@@ -379,9 +393,9 @@ public class ReportController {
 						int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 						String nameOfDay = "";
 
-						Cell dayNameCell = dayNameRow.createCell(i + 1);
+						Cell dayNameCell = dayNameRow.createCell(i + 2);
 
-						Cell dayCell = dateRow.createCell(i + 1);
+						Cell dayCell = dateRow.createCell(i + 2);
 						dayCell.setCellValue(i + 1);
 
 						if (dayOfWeek == 1) {
@@ -419,17 +433,17 @@ public class ReportController {
 
 				if (year % 4 == 0) {
 					sidework.addMergedRegion(
-							new CellRangeAddress(0, 1, dayOfMonth29[indexOfMonth] + 1, dayOfMonth29[indexOfMonth] + 1));
-					Cell totalCellR0 = dateRow.createCell(dayOfMonth29[indexOfMonth] + 1);
-					Cell totalCellR1 = dayNameRow.createCell(dayOfMonth29[indexOfMonth] + 1);
+							new CellRangeAddress(0, 1, dayOfMonth29[indexOfMonth] + 2, dayOfMonth29[indexOfMonth] + 2));
+					Cell totalCellR0 = dateRow.createCell(dayOfMonth29[indexOfMonth] + 2);
+					Cell totalCellR1 = dayNameRow.createCell(dayOfMonth29[indexOfMonth] + 2);
 					totalCellR1.setCellValue("Total");
 					totalCellR1.setCellStyle(cellHeaderStyle);
 					totalCellR0.setCellStyle(cellHeaderStyle);
 				} else {
 					sidework.addMergedRegion(
-							new CellRangeAddress(0, 1, dayOfMonth28[indexOfMonth] + 1, dayOfMonth28[indexOfMonth] + 1));
-					Cell totalCellR0 = dateRow.createCell(dayOfMonth28[indexOfMonth] + 1);
-					Cell totalCellR1 = dayNameRow.createCell(dayOfMonth28[indexOfMonth] + 1);
+							new CellRangeAddress(0, 1, dayOfMonth28[indexOfMonth] + 2, dayOfMonth28[indexOfMonth] + 2));
+					Cell totalCellR0 = dateRow.createCell(dayOfMonth28[indexOfMonth] + 2);
+					Cell totalCellR1 = dayNameRow.createCell(dayOfMonth28[indexOfMonth] + 2);
 					totalCellR1.setCellValue("Total");
 					totalCellR1.setCellStyle(cellHeaderStyle);
 					totalCellR0.setCellStyle(cellHeaderStyle);
@@ -440,11 +454,14 @@ public class ReportController {
 			// Body
 			// Name column
 			while (getName.next()) {
-				
+				String empNo = getName.getString("employee_no");
 				String fname = getName.getString("firstname");
 				String lname = getName.getString("lastname");
 				Row dataRow = sidework.createRow(row + 2);
-				Cell dataNameCell = dataRow.createCell(0);
+				Cell dataEmpNoCell = dataRow.createCell(0);
+				Cell dataNameCell = dataRow.createCell(1);
+				dataEmpNoCell.setCellValue(empNo);
+				dataEmpNoCell.setCellStyle(cellEmpNoStyle);
 				dataNameCell.setCellValue(fname + " " + lname);
 				dataNameCell.setCellStyle(border);
 				dataRow.setRowStyle(border);
@@ -462,7 +479,7 @@ public class ReportController {
 						int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 
 						if (dayOfWeek == 6 || dayOfWeek == 7) {
-							Cell dataWeekendsCell = dataRow.createCell(i + 1);
+							Cell dataWeekendsCell = dataRow.createCell(i + 2);
 							dataWeekendsCell.setCellStyle(ColorLEMON);
 						}
 					}
@@ -477,7 +494,7 @@ public class ReportController {
 						int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 
 						if (dayOfWeek == 6 || dayOfWeek == 7) {
-							Cell dataWeekendsCell = dataRow.createCell(i + 1);
+							Cell dataWeekendsCell = dataRow.createCell(i + 2);
 							dataWeekendsCell.setCellStyle(ColorLEMON);
 						}
 					}
@@ -500,7 +517,7 @@ public class ReportController {
 							} else {
 								sumDay28[day] += 1;
 							}
-							Cell dateWorkCell = dataRow.createCell(day);
+							Cell dateWorkCell = dataRow.createCell(day+1);
 							dateWorkCell.setCellValue(1);
 							dateWorkCell.setCellStyle(workTimesStyle);
 							dateWorkCell.setCellStyle(ColorGREY25);
@@ -509,23 +526,23 @@ public class ReportController {
 				}
 
 				if (year % 4 == 0) {
-					Cell dataTotalCell = dataRow.createCell(dayOfMonth29[indexOfMonth] + 1);
+					Cell dataTotalCell = dataRow.createCell(dayOfMonth29[indexOfMonth] + 2);
 					int cwllIndex = 1;
 					CellReference cr = new CellReference(row + 2, cwllIndex);
 					String firstRowKey = cr.formatAsString().replace("$", "");
 
-					CellReference cr2 = new CellReference(row + 2, dayOfMonth29[indexOfMonth]);
+					CellReference cr2 = new CellReference(row + 2, dayOfMonth29[indexOfMonth]+1);
 					String lastRowKey = cr2.formatAsString().replace("$", "");
 
 					dataTotalCell.setCellFormula("SUM(" + firstRowKey + ":" + lastRowKey + ")");
 					dataTotalCell.setCellStyle(cellHeaderStyle);
 				} else {
-					Cell dataTotalCell = dataRow.createCell(dayOfMonth28[indexOfMonth] + 1);
+					Cell dataTotalCell = dataRow.createCell(dayOfMonth28[indexOfMonth] + 2);
 					int cwllIndex = 1;
 					CellReference cr = new CellReference(row + 2, cwllIndex);
 					String firstRowKey = cr.formatAsString().replace("$", "");
 
-					CellReference cr2 = new CellReference(row + 2, dayOfMonth28[indexOfMonth]);
+					CellReference cr2 = new CellReference(row + 2, dayOfMonth28[indexOfMonth]+1);
 					String lastRowKey = cr2.formatAsString().replace("$", "");
 
 					dataTotalCell.setCellFormula("SUM(" + firstRowKey + ":" + lastRowKey + ")");
@@ -536,7 +553,7 @@ public class ReportController {
 
 			// Footer
 			Row dataRowSum = sidework.createRow(row + 2);
-			Cell sumCell = dataRowSum.createCell(0);
+			Cell sumCell = dataRowSum.createCell(1);
 			sumCell.setCellValue("Sum");
 			sumCell.setCellStyle(cellFooterStyle);
 
@@ -553,7 +570,7 @@ public class ReportController {
 					dayOfCalendar.setTime(date2);
 					int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 
-					Cell dataSumCell = dataRowSum.createCell(i + 1);
+					Cell dataSumCell = dataRowSum.createCell(i + 2);
 
 					if (dayOfWeek == 6 || dayOfWeek == 7) {
 						dataSumCell.setCellStyle(ColorLEMON);
@@ -561,18 +578,18 @@ public class ReportController {
 						dataSumCell.setCellStyle(cellHeaderStyle);
 					}
 
-					int cwllIndex = i + 1;
+					int cwllIndex = i + 2;
 					CellReference cr = new CellReference(rowIndex, cwllIndex);
 					String firstRowKey = cr.formatAsString().replace("$", "");
 
 					CellReference cr2 = new CellReference(row + 1, cwllIndex);
 					String lastRowKey = cr2.formatAsString().replace("$", "");
 
-					Cell sumDayCell = dataRowSum.createCell(i + 1);
+					Cell sumDayCell = dataRowSum.createCell(i + 2);
 					sumDayCell.setCellFormula("SUM(" + firstRowKey + ":" + lastRowKey + ")");
 					sumDayCell.setCellStyle(cellHeaderStyle);
 				}
-				Cell sumAllCell = dataRowSum.createCell(dayOfMonth29[indexOfMonth] + 1);
+				Cell sumAllCell = dataRowSum.createCell(dayOfMonth29[indexOfMonth] + 2);
 
 				int cwllIndex = dayOfMonth29[indexOfMonth];
 				CellReference cr = new CellReference(row + 2, 1);
@@ -594,7 +611,7 @@ public class ReportController {
 					dayOfCalendar.setTime(date2);
 					int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 
-					Cell dataSumCell = dataRowSum.createCell(i + 1);
+					Cell dataSumCell = dataRowSum.createCell(i + 2);
 
 					if (dayOfWeek == 6 || dayOfWeek == 7) {
 						dataSumCell.setCellStyle(ColorLEMON);
@@ -602,18 +619,18 @@ public class ReportController {
 						dataSumCell.setCellStyle(cellHeaderStyle);
 					}
 
-					int cwllIndex = i + 1;
+					int cwllIndex = i + 2;
 					CellReference cr = new CellReference(rowIndex, cwllIndex);
 					String firstRowKey = cr.formatAsString().replace("$", "");
 
 					CellReference cr2 = new CellReference(row + 1, cwllIndex);
 					String lastRowKey = cr2.formatAsString().replace("$", "");
 
-					Cell sumDayCell = dataRowSum.createCell(i + 1);
+					Cell sumDayCell = dataRowSum.createCell(i + 2);
 					sumDayCell.setCellFormula("SUM(" + firstRowKey + ":" + lastRowKey + ")");
 					sumDayCell.setCellStyle(cellHeaderStyle);
 				}
-				Cell sumAllCell = dataRowSum.createCell(dayOfMonth29[indexOfMonth] + 1);
+				Cell sumAllCell = dataRowSum.createCell(dayOfMonth29[indexOfMonth] + 2);
 
 				int cwllIndex = dayOfMonth28[indexOfMonth];
 				CellReference cr = new CellReference(row + 2, 1);
