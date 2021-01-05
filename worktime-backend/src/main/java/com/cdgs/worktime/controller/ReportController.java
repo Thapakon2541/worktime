@@ -537,7 +537,7 @@ public class ReportController {
 					dataTotalCell.setCellFormula("SUM(" + firstRowKey + ":" + lastRowKey + ")");
 					dataTotalCell.setCellStyle(cellHeaderStyle);
 				} else {
-					Cell dataTotalCell = dataRow.createCell(dayOfMonth28[indexOfMonth] + 2);
+					Cell dataTotalCell = dataRow.createCell(dayOfMonth28[indexOfMonth] + 2	);
 					int cwllIndex = 1;
 					CellReference cr = new CellReference(row + 2, cwllIndex);
 					String firstRowKey = cr.formatAsString().replace("$", "");
