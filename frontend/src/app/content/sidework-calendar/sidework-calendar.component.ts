@@ -140,10 +140,11 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       defaultView: 'dayGridMonth',
       displayEventTime: false,
       header: {
-        left: 'today,dayGridMonth,timeGridWeek,timeGridDay',
+        left: 'today',
         center: 'title',
         right: 'prev, next',
       },
+      //dayGridMonth,timeGridWeek,timeGridDay
       editable: false,
       selectable: false,
       dateClick: (el) => {
