@@ -24,11 +24,18 @@ export class CalendarService {
   private changeLeaves = new Subject<void>();
   onLoadLeaves$ = this.changeLeaves.pipe(
     switchMap((__) =>
+<<<<<<< HEAD
       this.getLeaveEmployee(localStorage.getItem("year"), localStorage.getItem("employeeNo"))
     )
   );
 
 
+=======
+      this.getLeaveEmployee(localStorage.getItem('year'), localStorage.getItem('employeeNo'))
+    )
+  );
+
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
   loadLeaves() {
     this.changeLeaves.next();
   }
@@ -66,7 +73,10 @@ export class CalendarService {
       )
       .pipe(map((res) => res.data));
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
 // get LeaveEmployee API
   getLeaveEmployee(year: string, id: string) {
     return this.http

@@ -89,8 +89,12 @@ public class ReportLeaveEmployee {
 
 		try {
 			// 1. Get a connection to database
+<<<<<<< HEAD
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 					"root", "root");
+=======
+			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime", "root" , "1234");
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
 			
 			// 2. Create a statement
 			myStmt = myConn.createStatement();	
@@ -224,7 +228,11 @@ public class ReportLeaveEmployee {
 		int row = 0;
 
 		int[] sumDay29 = new int[dayOfMonth29[indexOfMonth] + 1];
+<<<<<<< HEAD
 		int[] sumDay28 = new int[dayOfMonth28[indexOfMonth] + 1];
+=======
+		int[] sumDay28 = new int[dayOfMonth29[indexOfMonth] + 1];
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
 
 		// ลาป่วย
 		CellStyle colorYellow = workbook.createCellStyle();
@@ -304,8 +312,12 @@ public class ReportLeaveEmployee {
 
 		try {
 			// 1 connect database ดึงข้อมูลพนักงาน ได้แก่ empNo firstname lastname
+<<<<<<< HEAD
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 					"root", "root");
+=======
+			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime", "root", "1234");
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
 
 			// 2. Create a statement
 			myStmt = myConn.createStatement();
@@ -361,7 +373,11 @@ public class ReportLeaveEmployee {
 						dayCell.setCellStyle(cellHeaderStyle);
 					}
 				} else {
+<<<<<<< HEAD
 					for (int index = 0; index < dayOfMonth28[indexOfMonth]; index++) {
+=======
+					for (int index = 0; index < dayOfMonth29[indexOfMonth]; index++) {
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
 						calendarDate.set(Calendar.YEAR, year);
 						calendarDate.set(Calendar.MONTH, indexOfMonth);
 						calendarDate.set(Calendar.DAY_OF_MONTH, index);

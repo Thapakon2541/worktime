@@ -78,8 +78,12 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     const holidayYear = this.calendarDate.getUTCFullYear();
     const leaveYear = this.calendarDate.getUTCFullYear();
 
+    const leaveYear = this.calendarDate.getFullYear();
+
     localStorage.setItem("month", holidayMonth.toString());
     localStorage.setItem("year", holidayYear.toString());
+    localStorage.setItem("year", leaveYear.toString());
+
     localStorage.setItem("year", leaveYear.toString());
 
     this.holidaysEventService();
@@ -208,7 +212,12 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         event.workAnyWhere === 3 ? 'RebeccaPurple' : event.workAnyWhere === 0 ? 'Maroon': 
         event.title.includes("ลา")?'Orange': ' rgb(243, 127, 127)',
         textColor: event.workAnyWhere === 1 ? 'Azure' : event.workAnyWhere === 2 ? 'Azure' :
+<<<<<<< HEAD
         event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : event.title.includes("ลา")?'Black':'Black'
+=======
+        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : 
+        event.title.includes("ลา")?'Black':'Black'
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
       };
     });
   }
@@ -411,6 +420,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     }
    // console.log(requestData)
    // console.log(Subject)
+<<<<<<< HEAD
   }
 
 
@@ -428,6 +438,21 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
      // console.log(requestData)
   
   }
+=======
+
+  
+  }
+ // Get leaveEmployee จ่าก webService
+  leaveEmployeeEventService() {
+    const requestData = {
+        ...Subject,
+        employeeNo: localStorage.getItem('employeeNo'),
+        leaveYear: localStorage.getItem('year')
+      }
+     // console.log(requestData)
+  
+  }
+>>>>>>> bbdbd2970c698f1ea1465a74a87ce2776b2b668a
  
 
   
