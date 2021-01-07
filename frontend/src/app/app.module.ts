@@ -12,16 +12,18 @@ import { ContentModule } from "./content/content.module";
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    QuicklinkModule,
     ContentModule,
     AppRoutingModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     }),
+    
     CoreModule,
     SharedModule,
     BrowserAnimationsModule,
