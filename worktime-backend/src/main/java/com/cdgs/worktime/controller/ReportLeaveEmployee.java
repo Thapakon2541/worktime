@@ -91,10 +91,10 @@ public class ReportLeaveEmployee {
 			// 1. Get a connection to database
 
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-					"root", "root");
-			
+				"root", "root");
+		
 			// DB เครื่อง
-			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime", "root" , "1234");
+			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root" , "");
 
 			
 			// 2. Create a statement
@@ -311,7 +311,7 @@ public class ReportLeaveEmployee {
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 					"root", "root");
 			// db เครื่อง
-			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime", "root", "1234");
+			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "");
 
 
 			// 2. Create a statement
@@ -492,27 +492,27 @@ public class ReportLeaveEmployee {
 				} 
 			//set label
 					
-						XSSFRow rowLabel1 = sheet.getRow(2);
+						XSSFRow rowLabel1 = sheet.createRow(2);
 						Cell cellLabel1 = rowLabel1.createCell(0);
 						cellLabel1.setCellStyle(colorGreen);
 						cellLabel1.setCellValue("ลาพักผ่อน");
 						
-						XSSFRow rowLabel2 = sheet.getRow(3);
+						XSSFRow rowLabel2 = sheet.createRow(3);
 						Cell cellLabel2 = rowLabel2.createCell(0);
 						cellLabel2.setCellStyle(colorLIGHT_BLUE);
 						cellLabel2.setCellValue("ลากิจ");
 						
-						XSSFRow rowLabel3 = sheet.getRow(4);
+						XSSFRow rowLabel3 = sheet.createRow(4);
 						Cell cellLabel3 = rowLabel3.createCell(0);
 						cellLabel3.setCellStyle(colorYellow);
 						cellLabel3.setCellValue("ลาป่วย");
 						
-						XSSFRow rowLabel4 = sheet.getRow(5);
+						XSSFRow rowLabel4 = sheet.createRow(5);
 						Cell cellLabel4 = rowLabel4.createCell(0);
 						cellLabel4.setCellStyle(colorPink);
 						cellLabel4.setCellValue("ลาสมรส");
 						
-						XSSFRow rowLabel6 = sheet.getRow(6);
+						XSSFRow rowLabel6 = sheet.createRow(6);
 						Cell cellLabel6 = rowLabel6.createCell(0);
 						cellLabel6.setCellStyle(colorOther);
 						cellLabel6.setCellValue("อื่นๆ");

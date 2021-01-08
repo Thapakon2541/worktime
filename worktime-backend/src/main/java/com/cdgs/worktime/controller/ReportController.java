@@ -59,10 +59,10 @@ public class ReportController {
 				"jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 				"root", "root");
 		
-//		database ในเครื่อง
+		//database ในเครื่อง
 //		con = DriverManager.getConnection(
 //				"jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-//				"root", "p@ssw0rd");
+//				"root", "");
 
 		
 		java.sql.Statement stEndTime = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -158,7 +158,7 @@ public class ReportController {
 //		database ในเครื่อง
 //		Connection connect = DriverManager.getConnection(
 //				"jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-//				"root", "root");
+//				"root", "");
 		
 		
 
