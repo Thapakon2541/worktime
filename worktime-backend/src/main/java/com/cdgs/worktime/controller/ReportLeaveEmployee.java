@@ -92,6 +92,11 @@ public class ReportLeaveEmployee {
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 					"root", "root");
 			
+			// db เครื่อง
+			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "");
+
+			
+			
 			// 2. Create a statement
 			myStmt = myConn.createStatement();	
 			
@@ -125,7 +130,7 @@ public class ReportLeaveEmployee {
 						StringBuilder sb = new StringBuilder();
 						while ((line = br.readLine()) != null) {
 							sb.append(line + "\n");
-							System.out.println(line.strip());
+						
 						}
 						br.close();
 						
@@ -304,8 +309,12 @@ public class ReportLeaveEmployee {
 
 		try {
 			// 1 connect database ดึงข้อมูลพนักงาน ได้แก่ empNo firstname lastname
-			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-					"root", "root");
+//			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
+//					"root", "root");
+			
+			// db เครื่อง
+			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "");
+
 
 			// 2. Create a statement
 			myStmt = myConn.createStatement();
