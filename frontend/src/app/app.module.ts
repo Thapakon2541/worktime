@@ -12,12 +12,12 @@ import { ContentModule } from "./content/content.module";
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
 import { ReactiveFormsModule } from '@angular/forms';
-import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    QuicklinkModule,
     ContentModule,
     AppRoutingModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
@@ -29,7 +29,7 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
     BrowserAnimationsModule,
     ReactiveFormsModule
   ],
-  providers: [{ provide: LOCALE_ID, useValue: "th-TH" }],
+  providers: [{ provide: LOCALE_ID, useValue: "th-TH" },{provide:LocationStrategy,useClass:HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

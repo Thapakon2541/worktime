@@ -1,4 +1,4 @@
-package com.cdgs.worktime.controller;
+	package com.cdgs.worktime.controller;
 
 import java.beans.Statement;
 import java.io.BufferedWriter;
@@ -62,7 +62,7 @@ public class ReportController {
 		//database ในเครื่อง
 //		con = DriverManager.getConnection(
 //				"jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-//				"root", "");
+//				"root", "banyoun1");
 
 		
 		java.sql.Statement stEndTime = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -158,7 +158,7 @@ public class ReportController {
 //		database ในเครื่อง
 //		Connection connect = DriverManager.getConnection(
 //				"jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-//				"root", "");
+//				"root", "banyoun1");
 		
 		
 
@@ -178,7 +178,7 @@ public class ReportController {
 		java.sql.Statement calendarStatement = connect.createStatement();
 		java.sql.Statement nameStatement = connect.createStatement();
 		java.sql.Statement dateStatement = connect.createStatement();
-
+ 
 		ResultSet getCalendar = calendarStatement.executeQuery(workTime);
 
 		// Get year

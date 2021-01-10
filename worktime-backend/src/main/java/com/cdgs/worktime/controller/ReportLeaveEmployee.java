@@ -91,9 +91,9 @@ public class ReportLeaveEmployee {
 			// 1. Get a connection to database
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 					"root", "root");
-			
+//			
 			// db เครื่อง
-			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "");
+			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "banyoun1");
 
 			
 			
@@ -248,10 +248,13 @@ public class ReportLeaveEmployee {
 
 		// ลากิจ
 		CellStyle colorLIGHT_BLUE = workbook.createCellStyle();
+		Font bodyFont = workbook.createFont();
+		bodyFont.setColor(IndexedColors.WHITE.getIndex());
 		colorLIGHT_BLUE.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
 		colorLIGHT_BLUE.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		colorLIGHT_BLUE.setWrapText(true);
 		colorYellow.setVerticalAlignment(VerticalAlignment.TOP);
+		colorLIGHT_BLUE.setFont(bodyFont	);
 
 		// ลาสมรส
 		CellStyle colorPink = workbook.createCellStyle();
@@ -279,6 +282,7 @@ public class ReportLeaveEmployee {
 		headerFont.setColor(IndexedColors.BLACK.getIndex());
 		headerFont.setBold(true);
 
+
 		// Border
 		CellStyle border = workbook.createCellStyle();
 		border.setBorderTop(BorderStyle.THIN);
@@ -294,6 +298,7 @@ public class ReportLeaveEmployee {
 		cellHeaderStyle.setFont(headerFont);
 		cellHeaderStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
 		cellHeaderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
 		// ------------------------------------------------------------------//
 
 		int status;
@@ -309,11 +314,11 @@ public class ReportLeaveEmployee {
 
 		try {
 			// 1 connect database ดึงข้อมูลพนักงาน ได้แก่ empNo firstname lastname
-//			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
-//					"root", "root");
+			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
+					"root", "root");
 			
 			// db เครื่อง
-			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "");
+			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "banyoun1");
 
 
 			// 2. Create a statement
@@ -461,6 +466,7 @@ public class ReportLeaveEmployee {
 							 	case "VACA":
 							 	celldata.setCellStyle(colorGreen);
 								 celldata.setCellValue(nameLeave);
+								
 								break;
 							 	case "SICK":
 								 celldata.setCellStyle(colorYellow);
@@ -515,6 +521,7 @@ public class ReportLeaveEmployee {
 						Cell cellLabel2 = rowLabel2.createCell(0);
 						cellLabel2.setCellStyle(colorLIGHT_BLUE);
 						cellLabel2.setCellValue("ลากิจ");
+						
 						
 //						XSSFRow rowLabel3 = sheet.createRow(4);
 						XSSFRow rowLabel3 = sheet.getRow(4);

@@ -66,9 +66,19 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
-    
     this.checkEmployee();
     this.calendarLoad();
+        this.sideworkEvents = {
+      [Symbol.iterator]() {
+        return [][Symbol.iterator]()
+      }
+    }
+
+    this.holidayEvents = {
+      [Symbol.iterator]() {
+        return [][Symbol.iterator]()
+      }
+    }
   }
 
   calendarChangeDate(date: Date) {
@@ -83,15 +93,15 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     localStorage.setItem("year", leaveYear.toString());
 
     localStorage.setItem("year", leaveYear.toString());
-
     this.holidaysEventService();
     this.leaveEmployeeEventService() ;
+  
 
-    this.sideworkEvents = {
-      [Symbol.iterator]() {
-        return [][Symbol.iterator]()
-      }
-    }
+    // this.sideworkEvents = {
+    //   [Symbol.iterator]() {
+    //     return [][Symbol.iterator]()
+    //   }
+    // }
 
     // this.holidayEvents = {
     //   [Symbol.iterator]() {
@@ -140,9 +150,9 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       defaultView: 'dayGridMonth',
       displayEventTime: false,
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay',
+        left: 'today',
         center: 'title',
-        right: 'prev, next, today',
+        right: 'prev, next,',
       },
       //dayGridMonth,timeGridWeek,timeGridDay
       editable: true,
@@ -162,7 +172,6 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
           && (weekday != 'Sun' && weekday != 'Sat')) {
           this.empDate = el.date;
           this.opendialogShowEmp('form');     
-          
         } else {
           // วันเสาร์-อาทิตย์กดลงเวลาไม่ได้
           if (weekday != 'Sun' && weekday != 'Sat') {
