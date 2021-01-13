@@ -139,7 +139,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       header: {
         left: 'today',
         center: 'title',
-        right: 'prev, next,',
+        right: 'prev:, next,',
       },
       //dayGridMonth,timeGridWeek,timeGridDay
       editable: true,
@@ -165,7 +165,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
             this.openDialogInsert('add');          
           }         
         }
-        //this.calendarLoad();  
+        
       },
       eventClick: (el) => {
         this.searchId = parseInt(el.event.id, 0);
@@ -206,9 +206,12 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         color: event.workAnyWhere === 1 ? 'SteelBlue' : event.workAnyWhere === 2 ? 'SeaGreen' :
         event.workAnyWhere === 3 ? 'RebeccaPurple' : event.workAnyWhere === 0 ? 'Maroon': 
         event.title.includes("ลา")?'Orange': ' rgb(243, 127, 127)',
+
         textColor: event.workAnyWhere === 1 ? 'Azure' : event.workAnyWhere === 2 ? 'Azure' :
-        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : event.title.includes("ลา")?'Black':'Black'
-      };
+        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : event.title.includes("ลา")?'Black':'Black',
+        
+      }
+      
     });
   }
 
@@ -235,7 +238,6 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
             
           //console.log(this.events)
           // ตั้งค่าสีให้กับ events
-          
           this.SetEventColor()
         }
       )
@@ -258,13 +260,11 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     this.subscription.add(
       this.calendarService.onLoadHolidays$.subscribe(
         (holidayEvent) => {
-          
           this.holidayEvents = holidayEvent;
           // console.log('holidayEvent')
           // console.log(this.events)
           //console.log(this.holidayEvents)
           //this.events ใช้สำหรับนำ events ทั้งหมดที่มีขึ้นบนปฏิทิน
-          
         }
       )
     );
@@ -422,10 +422,8 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         employeeNo: localStorage.getItem('employeeNo'),
         leaveYear: localStorage.getItem('year')
       }
-      if (requestData.employeeNo == '004061' || requestData.employeeNo == '001153' || requestData.employeeNo == '000242'
-      || requestData.employeeNo == '000168' || requestData.employeeNo == '000225' || requestData.employeeNo == '004912') {
-      this.leaveEmployee = true;
-      }
+
+     
      // console.log(requestData)
   
   }
