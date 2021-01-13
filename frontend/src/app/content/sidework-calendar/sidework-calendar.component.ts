@@ -139,8 +139,11 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       header: {
         left: 'today',
         center: 'title',
-        right: 'prev, next,',
+        right: 'prev,next',
       },
+
+
+    
       //dayGridMonth,timeGridWeek,timeGridDay
       editable: true,
       selectable: false,
@@ -202,10 +205,10 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     this.events = this.events.map((event) => {  
       return {
         ...event,
+        
         color: event.workAnyWhere === 1 ? 'SteelBlue' : event.workAnyWhere === 2 ? 'SeaGreen' :
         event.workAnyWhere === 3 ? 'RebeccaPurple' : event.workAnyWhere === 0 ? 'Maroon': 
         event.title.includes("ลา")?'Orange': ' rgb(243, 127, 127)',
-
         textColor: event.workAnyWhere === 1 ? 'Azure' : event.workAnyWhere === 2 ? 'Azure' :
         event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : event.title.includes("ลา")?'Black':'Black',
         
@@ -407,7 +410,8 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     const requestData = {
       ...Subject,
       employeeNo: localStorage.getItem('employeeNo'),
-      holidayYear: localStorage.getItem('year')
+      holidayYear: localStorage.getItem('year'),
+      display:"background"
     }
    // console.log(requestData)
    // console.log(Subject)
