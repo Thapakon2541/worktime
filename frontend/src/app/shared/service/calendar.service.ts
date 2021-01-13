@@ -58,7 +58,7 @@ export class CalendarService {
   }
 
 
-  // Holidays API
+ // Holidays API
   getHolidays(year: string, id: string) {
     return this.http
       .get<{ data: Calendar[] }>(

@@ -93,21 +93,8 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     localStorage.setItem("year", leaveYear.toString());
 
     localStorage.setItem("year", leaveYear.toString());
-    this.holidaysEventService();
-    this.leaveEmployeeEventService() ;
-  
-
-    // this.sideworkEvents = {
-    //   [Symbol.iterator]() {
-    //     return [][Symbol.iterator]()
-    //   }
-    // }
-
-    // this.holidayEvents = {
-    //   [Symbol.iterator]() {
-    //     return [][Symbol.iterator]()
-    //   }
-    // }
+    // this.holidaysEventService();
+    // this.leaveEmployeeEventService();
     
   }
   
@@ -243,6 +230,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
             this.events = [...this.sideworkEvents];
           }else{
             this.events = [ ...this.sideworkEvents,...this.holidayEvents,...this.leaveEvents];
+            
           }
             
           //console.log(this.events)
@@ -266,7 +254,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     );   
     this.sideworkService.loadSideworkCalendar();  
     
-    // // โหลด holiday event
+    // โหลด holiday event
     this.subscription.add(
       this.calendarService.onLoadHolidays$.subscribe(
         (holidayEvent) => {
@@ -282,7 +270,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     );
     this.calendarService.loadHolidays();
     
-     // โหลด leave event
+    // โหลด leave event
     this.subscription.add(
       this.calendarService.onLoadLeaves$.subscribe(
         (leaveEvent) => {
@@ -293,6 +281,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
           //this.events ใช้สำหรับนำ events ทั้งหมดที่มีขึ้นบนปฏิทิน
           if(this.holidayEvents){
             this.events = [ ...this.sideworkEvents,...this.holidayEvents,...this.leaveEvents];
+            
           }else{
             this.events = [ ...this.sideworkEvents,...this.leaveEvents];
           }
@@ -303,9 +292,9 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         }
       )
     );      
-    
     this.calendarService.loadLeaves();
   }
+
   getHistorySideWork(): Subject<SideWork[]> {
     return this.sideworkService.getSideWork();
   }
