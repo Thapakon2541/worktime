@@ -139,7 +139,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       header: {
         left: 'today',
         center: 'title',
-        right: 'prev:, next,',
+        right: 'prev, next,',
       },
       //dayGridMonth,timeGridWeek,timeGridDay
       editable: true,
@@ -202,7 +202,6 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     this.events = this.events.map((event) => {  
       return {
         ...event,
-        
         color: event.workAnyWhere === 1 ? 'SteelBlue' : event.workAnyWhere === 2 ? 'SeaGreen' :
         event.workAnyWhere === 3 ? 'RebeccaPurple' : event.workAnyWhere === 0 ? 'Maroon': 
         event.title.includes("ลา")?'Orange': ' rgb(243, 127, 127)',
