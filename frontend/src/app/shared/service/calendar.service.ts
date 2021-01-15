@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+  import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiConstants } from '../constants/ApiConstants';
 import { Calendar } from '../interfaces/calendar';
@@ -13,7 +13,7 @@ export class CalendarService {
   private changeHolidays = new Subject<void>();
   onLoadHolidays$ = this.changeHolidays.pipe(
     switchMap((__) =>
-      this.getHolidays(localStorage.getItem('year'), localStorage.getItem('employeeNo'))
+      this.getHolidays(localStorage.getItem("year"), localStorage.getItem("employeeNo"))
     )
   );
 
@@ -24,9 +24,10 @@ export class CalendarService {
   private changeLeaves = new Subject<void>();
   onLoadLeaves$ = this.changeLeaves.pipe(
     switchMap((__) =>
-      this.getLeaveEmployee(localStorage.getItem('year'), localStorage.getItem('employeeNo'))
+      this.getLeaveEmployee(localStorage.getItem("year"), localStorage.getItem("employeeNo"))
     )
   );
+
 
   loadLeaves() {
     this.changeLeaves.next();
@@ -57,7 +58,7 @@ export class CalendarService {
   }
 
 
-  // Holidays API
+ // Holidays API
   getHolidays(year: string, id: string) {
     return this.http
       .get<{ data: Calendar[] }>(

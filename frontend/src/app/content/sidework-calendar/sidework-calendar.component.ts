@@ -53,7 +53,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
   empDate: Date;
   eventDateClick: Date;
   calendarDate: Date;
-
+  
   constructor(
     private dialog: MatDialog,
     private messageService: MessageService,
@@ -66,38 +66,35 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
-    
     this.checkEmployee();
     this.calendarLoad();
+        this.sideworkEvents = {
+      [Symbol.iterator]() {
+        return [][Symbol.iterator]()
+      }
+    }
+
+    this.holidayEvents = {
+      [Symbol.iterator]() {
+        return [][Symbol.iterator]()
+      }
+    }
   }
 
   calendarChangeDate(date: Date) {
     this.calendarDate = date;
 
     const holidayMonth = this.calendarDate.getMonth() + 1;
-    const holidayYear = this.calendarDate.getFullYear();
-
+    const holidayYear = this.calendarDate.getUTCFullYear();
     const leaveYear = this.calendarDate.getFullYear();
-
+   
     localStorage.setItem("month", holidayMonth.toString());
     localStorage.setItem("year", holidayYear.toString());
-
     localStorage.setItem("year", leaveYear.toString());
 
-    this.holidaysEventService();
-    this.leaveEmployeeEventService() ;
-
-    this.sideworkEvents = {
-      [Symbol.iterator]() {
-        return [][Symbol.iterator]()
-      }
-    }
-
-    // this.holidayEvents = {
-    //   [Symbol.iterator]() {
-    //     return [][Symbol.iterator]()
-    //   }
-    // }
+    localStorage.setItem("year", leaveYear.toString());
+    // this.holidaysEventService();
+    // this.leaveEmployeeEventService();
     
   }
   
@@ -142,9 +139,13 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
       header: {
         left: 'today',
         center: 'title',
-        right: 'prev, next',
+        right: 'prev,next',
       },
-      editable: false,
+
+
+    
+      //dayGridMonth,timeGridWeek,timeGridDay
+      editable: true,
       selectable: false,
       dateClick: (el) => {
         const requestData = {
@@ -161,14 +162,13 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
           && (weekday != 'Sun' && weekday != 'Sat')) {
           this.empDate = el.date;
           this.opendialogShowEmp('form');     
-          
         } else {
           // วันเสาร์-อาทิตย์กดลงเวลาไม่ได้
           if (weekday != 'Sun' && weekday != 'Sat') {
             this.openDialogInsert('add');          
           }         
         }
-        //this.calendarLoad();  
+        
       },
       eventClick: (el) => {
         this.searchId = parseInt(el.event.id, 0);
@@ -210,12 +210,14 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         event.workAnyWhere === 3 ? 'RebeccaPurple' : event.workAnyWhere === 0 ? 'Maroon': 
         event.title.includes("ลา")?'Orange': ' rgb(243, 127, 127)',
         textColor: event.workAnyWhere === 1 ? 'Azure' : event.workAnyWhere === 2 ? 'Azure' :
-        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : 
-        event.title.includes("ลา")?'Black':'Black'
-      };
+        event.workAnyWhere === 3 ? 'Azure' : event.workAnyWhere === 0 ? 'Azure' : event.title.includes("ลา")?'Black':'Black',
+        
+      }
+      
     });
   }
 
+  
   LoadAllEventsOnCalendar() {
     
     // โหลด sidework event ขึ้นบน calendar
@@ -233,11 +235,11 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
             this.events = [...this.sideworkEvents];
           }else{
             this.events = [ ...this.sideworkEvents,...this.holidayEvents,...this.leaveEvents];
+            
           }
             
           //console.log(this.events)
           // ตั้งค่าสีให้กับ events
-          
           this.SetEventColor()
         }
       )
@@ -256,23 +258,21 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     );   
     this.sideworkService.loadSideworkCalendar();  
     
-    // // โหลด holiday event
+    // โหลด holiday event
     this.subscription.add(
       this.calendarService.onLoadHolidays$.subscribe(
         (holidayEvent) => {
-          
           this.holidayEvents = holidayEvent;
           // console.log('holidayEvent')
           // console.log(this.events)
           //console.log(this.holidayEvents)
           //this.events ใช้สำหรับนำ events ทั้งหมดที่มีขึ้นบนปฏิทิน
-          
         }
       )
     );
     this.calendarService.loadHolidays();
     
-     // โหลด leave event
+    // โหลด leave event
     this.subscription.add(
       this.calendarService.onLoadLeaves$.subscribe(
         (leaveEvent) => {
@@ -283,6 +283,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
           //this.events ใช้สำหรับนำ events ทั้งหมดที่มีขึ้นบนปฏิทิน
           if(this.holidayEvents){
             this.events = [ ...this.sideworkEvents,...this.holidayEvents,...this.leaveEvents];
+            
           }else{
             this.events = [ ...this.sideworkEvents,...this.leaveEvents];
           }
@@ -293,9 +294,9 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         }
       )
     );      
-    
     this.calendarService.loadLeaves();
   }
+
   getHistorySideWork(): Subject<SideWork[]> {
     return this.sideworkService.getSideWork();
   }
@@ -346,6 +347,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
           });
         }
       );
+
   }
 
   opendialogShowEmp(type: string) {
@@ -356,6 +358,7 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     };
     const dialogRef = this.dialog.open(SideWorkComponent, configDialog);
     dialogRef.afterClosed().subscribe();
+
   }
 
   openDialogEdit(type: string, itemSideWork: SideWork) {
@@ -407,13 +410,14 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
     const requestData = {
       ...Subject,
       employeeNo: localStorage.getItem('employeeNo'),
-      holidayYear: localStorage.getItem('year')
+      holidayYear: localStorage.getItem('year'),
+      display:"background"
     }
    // console.log(requestData)
    // console.log(Subject)
-
-  
   }
+
+
  // Get leaveEmployee จ่าก webService
   leaveEmployeeEventService() {
     const requestData = {
@@ -421,6 +425,8 @@ export class SideworkCalendarComponent implements OnInit, OnDestroy, AfterViewIn
         employeeNo: localStorage.getItem('employeeNo'),
         leaveYear: localStorage.getItem('year')
       }
+
+     
      // console.log(requestData)
   
   }

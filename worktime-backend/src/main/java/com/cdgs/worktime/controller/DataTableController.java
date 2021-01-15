@@ -155,30 +155,7 @@ public class DataTableController {
 		}
 	}
 	
-//	@GetMapping(path = "/leave/{no}")
-//	private ResponseEntity<ResponseDto<CalendarDto>> getLeav(@PathVariable(value = "no") String empNo){
-//		ResponseDto<CalendarDto> res = new ResponseDto<CalendarDto>();
-//		List<CalendarDto> dto = new ArrayList<CalendarDto>();
-//		List<EmployeeDto> employee = employeeService.getEmployeeByNo(empNo);
-//		
-//		
-//		try {
-//			dto = dataTableService.getSideWorkCalendar(employee.get(0).getId());
-//			res.setResult(ResponseDto.RESPONSE_RESULT.Success.getRes());
-//			res.setData(dto);
-//			res.setCode(201);
-//			return new ResponseEntity<ResponseDto<CalendarDto>>(res, HttpStatus.ACCEPTED);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			
-//			res.setResult(ResponseDto.RESPONSE_RESULT.Fail.getRes());
-//			res.setErrorMessage(e.getMessage());
-//			res.setCode(400);
-//			return new ResponseEntity<ResponseDto<CalendarDto>>(res, HttpStatus.BAD_REQUEST);
-//		}
-//		
-//	}
-//	
+
 	
 	
 
