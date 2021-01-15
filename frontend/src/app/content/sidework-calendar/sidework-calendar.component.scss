@@ -49,7 +49,7 @@ html, body {
   width:30px;
   height: 30px;
   border-radius: 15%;
-  background: orange;
+  background: rgb(248, 209, 137);
 }
 
 .text{
@@ -77,9 +77,17 @@ html, body {
 
 .typeTab{
   display: inline-flex;
+  position: relative;
   padding:3px 3px 3px 3px;
+
 }
 
 .typeText{
   margin: auto;
+}
+@media screen and (max-width: 640px) {
+  .typeTab{
+    display: inline-flex;
+    padding:1px 1px 1px 1px;
+  }
 }

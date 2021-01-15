@@ -37,7 +37,7 @@
     </div>
   </nav>
 
-  <p-sidebar [(visible)]="showToggle" position="top">
+  <p-sidebar [(visible)]="showToggle" position="top" >
     <div class="menu-responsive">
       {{ employee?.firstname }}
       {{ employee?.lastname }}
@@ -46,8 +46,8 @@
       {{ employee?.no }}
     </div>
     <hr />
-    <div class="menu-responsive">
-      <span class="text-menu">ออกจากระบบ</span>
+    <div class="menu-responsive" (click)="signOut()">
+          <span  class="text-menu"  >ออกจากระบบ</span>
     </div>
   </p-sidebar>
 </mat-grid-list>

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.json",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -42,6 +42,7 @@
     "ngx-bootstrap": "^5.5.0",
     "ngx-filesaver": "^10.0.0",
     "ngx-material-timepicker": "^5.5.3",
+    "ngx-quicklink": "^0.2.6",
     "ngx-spinner": "^9.0.0",
     "primeflex": "^1.0.0",
     "primeicons": "^2.0.0",
