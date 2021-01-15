@@ -333,11 +333,8 @@ public class ReportLeaveEmployee {
 			// 1 connect database ดึงข้อมูลพนักงาน ได้แก่ empNo firstname lastname
 			myConn = DriverManager.getConnection("jdbc:mysql://10.254.40.203:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC",
 					"root", "root");
-			
 			// db เครื่อง
 			//myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/worktime?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC", "root", "banyoun1");
-
-
 			// 2. Create a statement
 			myStmt = myConn.createStatement();
 
@@ -373,7 +370,6 @@ public class ReportLeaveEmployee {
 				// header
 				Row dayNameRow = sheet.createRow(0);
 				XSSFRow rows = sheet.createRow(1); // ROW 1
-				
 				sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 0));
 				Cell empNoCellR00 = dayNameRow.createCell(0);
 				Cell empNoCellR01 = rows.createCell(0);
@@ -396,8 +392,6 @@ public class ReportLeaveEmployee {
 						sheet.setColumnWidth(index+1, 25 * 250);
 						dayCell.setCellValue(index + 1);
 						dayCell.setCellStyle(cellHeaderStyle);
-						dayNameRow.setRowStyle(border);
-						
 						Cell dayNameCell = dayNameRow.createCell(index+1);
 						
 						if (dayOfWeek == 1) {
@@ -446,7 +440,7 @@ public class ReportLeaveEmployee {
 						sheet.setColumnWidth(index+1, 25 * 250);
 						dayCell.setCellValue(index + 1);
 						dayCell.setCellStyle(cellHeaderStyle);
-						dayNameRow.setRowStyle(border);
+
 						
 						Cell dayNameCell = dayNameRow.createCell(index + 1);
 						
@@ -548,42 +542,41 @@ public class ReportLeaveEmployee {
 								String type = nameLeave.substring(nameLeave.indexOf(",")+1).toString();
 								nameLeave=nameLeave.substring(nameLeave.indexOf("/")+1,nameLeave.indexOf(","));
 								XSSFRow rowD = sheet.getRow(rowIndex + 2);
-					
-								if (rowD == null) {
-									rowD = sheet.createRow(rowIndex + 2);
-									rowD.setRowStyle(border);
-								}
 								
+								if (rowD == null) {
+									
+									rowD = sheet.createRow(rowIndex + 2);
+								}
 								Cell celldata = rowD.createCell(columnIndex);
-								celldata.setCellStyle(border);
+
 						
 								
 								switch (type) {
 								 	case "VACA":
 								 	celldata.setCellStyle(border);
-								 	celldata.setCellStyle(colorGreen);
+								 	
 									 celldata.setCellValue(nameLeave);
 									
 									break;
 								 	case "SICK":
 								 		celldata.setCellStyle(border);
-									 celldata.setCellStyle(colorYellow);
+									 
 									 celldata.setCellValue(nameLeave);
 									break;
 								 	case "PERS":
 								 		celldata.setCellStyle(border);
-									 celldata.setCellStyle(colorLIGHT_BLUE);
+									
 									 celldata.setCellValue(nameLeave);
 									 break;
 									 
 								 	case "MARR": 
 								 		celldata.setCellStyle(border);
-									 celldata.setCellStyle(colorPink);
+									
 									 celldata.setCellValue(nameLeave);
 									 break;
 									default: 
 										celldata.setCellStyle(border);
-										celldata.setCellStyle(colorOther);
+										
 										 celldata.setCellValue(nameLeave);
 									break;
 							 }
@@ -624,30 +617,29 @@ public class ReportLeaveEmployee {
 								
 								if (rowD == null) {
 									rowD = sheet.createRow(rowIndex + 2);
-									rowD.setRowStyle(border);
+									
 								}
 								Cell celldata = rowD.createCell(columnIndex);
-								celldata.setCellStyle(border);
+							
 								
 							
 								switch (type) {
 								 	case "VACA":
 
-									 celldata.setCellValue(nameLeave);
-									 celldata.setCellStyle(workTimesStyle);
+									 celldata.setCellValue(nameLeave);									
 									 celldata.setCellStyle(colorGreen);
 									break;
 								 	case "SICK":
 								 		
 									 
 									 celldata.setCellValue(nameLeave);
-									 celldata.setCellStyle(workTimesStyle);
+								
 									 celldata.setCellStyle(colorYellow);
 									break;
 								 	case "PERS":
 	
 									 celldata.setCellValue(nameLeave);
-									 celldata.setCellStyle(workTimesStyle);
+									 
 									 celldata.setCellStyle(colorLIGHT_BLUE);
 									 break;
 									 
@@ -656,12 +648,12 @@ public class ReportLeaveEmployee {
 									
 									 celldata.setCellValue(nameLeave);
 									 celldata.setCellStyle(colorPink);
-									 celldata.setCellStyle(workTimesStyle);
+								
 									 break;
 									default: 
 										 celldata.setCellValue(nameLeave);
 										 celldata.setCellStyle(colorOther);
-										 celldata.setCellStyle(workTimesStyle);
+										
 										break;
 							 }
 								if(rowIndex==(mapsDay.size()-1)) {
@@ -680,14 +672,20 @@ public class ReportLeaveEmployee {
 		
 					} 
 				}
-				
+				// create border 
+						
+						
 
 						XSSFRow rowLabel1 = sheet.getRow(2);
 						if(rowLabel1==null) {
 							 rowLabel1=sheet.createRow(2);
-							 rowLabel1.setRowStyle(border);
-							 
+							 for (int i = 0; i < sumDay28.length; i++) {
+									
+									XSSFCell cellBorder = rowLabel1.createCell(i);
+									cellBorder.setCellStyle(border);
+								}
 						}
+						
 						Cell cellLabel1 = rowLabel1.createCell(0);
 						cellLabel1.setCellStyle(colorGreen);
 						cellLabel1.setCellValue("ลาพักผ่อน");
@@ -696,19 +694,18 @@ public class ReportLeaveEmployee {
 						XSSFRow rowLabel2 = sheet.getRow(3);
 						if(rowLabel2==null) {
 							 rowLabel2=sheet.createRow(3);
-							 rowLabel1.setRowStyle(border);
+							
 						}
 						Cell cellLabel2 = rowLabel2.createCell(0);
 						cellLabel2.setCellStyle(colorLIGHT_BLUE);
 						cellLabel2.setCellValue("ลากิจ");
-						
-						
 
 						XSSFRow rowLabel3 = sheet.getRow(4);
 						if(rowLabel3==null) {
 							 rowLabel3=sheet.createRow(4);
-							 rowLabel1.setRowStyle(border);
+							
 						}
+						
 						Cell cellLabel3 = rowLabel3.createCell(0);
 						cellLabel3.setCellStyle(colorYellow);
 						cellLabel3.setCellValue("ลาป่วย");
@@ -717,7 +714,7 @@ public class ReportLeaveEmployee {
 						XSSFRow rowLabel4 = sheet.getRow(5);
 						if(rowLabel4==null) {
 							rowLabel4=sheet.createRow(5);
-							rowLabel1.setRowStyle(border);
+							
 						}							
 						Cell cellLabel4 = rowLabel4.createCell(0);
 						cellLabel4.setCellStyle(colorPink);
@@ -727,11 +724,12 @@ public class ReportLeaveEmployee {
 						XSSFRow rowLabel5 = sheet.getRow(6);
 						if(rowLabel5==null) {
 							 rowLabel5=sheet.createRow(6);
-							 rowLabel1.setRowStyle(border);
+
 						}
 						Cell cellLabel5 = rowLabel5.createCell(0);
 						cellLabel5.setCellStyle(colorOther);
 						cellLabel5.setCellValue("อื่นๆ");
+						
 						
 						
 			for(int columnMax=0;columnMax<maxRow.size()+1;columnMax++) {
@@ -740,7 +738,7 @@ public class ReportLeaveEmployee {
 						
 						if(rowMaxD==null) {
 							rowMaxD = sheet.createRow(maxRowDay+1);
-							rowMaxD.setRowStyle(border);
+
 						}
 						
 						Cell cellDataMax = rowMaxD.createCell(columnMax);
@@ -748,13 +746,13 @@ public class ReportLeaveEmployee {
 						
 						if ((columnMax)==0) {
 							cellDataMax.setCellValue("รวมทั้งหมด");
-							cellDataMax.setCellStyle(workTimesStyle);
+						
 							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 							
 						}else {
 							
 							cellDataMax.setCellValue(maxRow.get(columnMax-1));
-							cellDataMax.setCellStyle(workTimesStyle);
+						
 							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 							
 						}
@@ -763,20 +761,20 @@ public class ReportLeaveEmployee {
 						
 						if(rowMaxD==null) {
 							rowMaxD = sheet.createRow(8+1);
-							rowMaxD.setRowStyle(border);
+
 						}
 
 						Cell cellDataMax = rowMaxD.createCell(columnMax);
 						
 						if ((columnMax)==0) {
 							cellDataMax.setCellValue("รวมทั้งหมด");
-							cellDataMax.setCellStyle(workTimesStyle);
+							
 							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 						
 													
 						}else {
 							cellDataMax.setCellValue(maxRow.get(columnMax-1));
-							cellDataMax.setCellStyle(workTimesStyle);
+							
 							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 							
 								
