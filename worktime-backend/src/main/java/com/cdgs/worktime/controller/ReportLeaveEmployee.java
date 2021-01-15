@@ -677,15 +677,7 @@ public class ReportLeaveEmployee {
 						
 
 						XSSFRow rowLabel1 = sheet.getRow(2);
-						if(rowLabel1==null) {
-							 rowLabel1=sheet.createRow(2);
-							 for (int i = 0; i < sumDay28.length; i++) {
-									
-									XSSFCell cellBorder = rowLabel1.createCell(i);
-									cellBorder.setCellStyle(border);
-								}
-						}
-						
+			
 						Cell cellLabel1 = rowLabel1.createCell(0);
 						cellLabel1.setCellStyle(colorGreen);
 						cellLabel1.setCellValue("ลาพักผ่อน");
