@@ -29,6 +29,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -71,6 +72,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReportLeaveEmployee {
 	@Autowired
 	EmployeeRespository employeeService;
+	
 	@GetMapping("/getDailyReport/{month}/{year}")
 	@ResponseBody
 	public String leaveEmployeeExcel(@PathVariable(value = "month")Integer month,@PathVariable(value = "year")Integer year)
@@ -157,47 +159,11 @@ public class ReportLeaveEmployee {
 			}
 			return OBJECT_MAPPER.writeValueAsString(responses);
 
-//			for (int i = 0; i < data.length; i++) {
-//				URL url = new URL("http://localhost:8080/workTimeAPI/getLeaveEmployee/2020/" + data[i]);
-//				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//				status = connection.getResponseCode();
-//				if (status == 200) {
-//
-//					BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//					StringBuilder sb = new StringBuilder(); 
-//					while ((line = br.readLine()) != null) {
-//						sb.append(line + "\n");
-//					}
-//					br.close();
-//					return sb.toString();
 
-//					InputStream inputStream = connection.getInputStream();
-//					StringBuffer stringBuffer = new StringBuffer();
-//					BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
-//					line = buffer.readLine();
-//					while (line != null) {
-//						stringBuffer.append(line);
-//						line = buffer.readLine();
-//						listResult.add(new LeaveEmployeeDto(line, line, null));
-//
-//					}
-//
-//					System.out.println(stringBuffer.toString());
-//					return JSONWriter.valueToString(stringBuffer.toString());
-//				}
-//
-//			}
-//			res.setResult(ResponseDto.RESPONSE_RESULT.Success.getRes());
-//			res.setData(listResult);
-//			res.setCode(201);
-//			return new ResponseEntity<ResponseDto<LeaveEmployeeDto>>(res,HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-//			res.setResult(ResponseDto.RESPONSE_RESULT.Success.getRes());
-//			res.setErrorMessage(e.getMessage());
-//			res.setCode(201);
-//			return new ResponseEntity<ResponseDto<LeaveEmployeeDto>>(res,HttpStatus.OK);
+
 		}
 		return line;
 
@@ -205,18 +171,19 @@ public class ReportLeaveEmployee {
 	
 	@GetMapping("leaveReport/{month}/{year}")
 	public ResponseEntity<Resource> leaveReport(@PathVariable(value = "month") Integer getMonth , @PathVariable(value = "year")Integer getYear) throws IOException, SQLException {
+		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		
 
 		// Get year
-		int year = Calendar.getInstance().get(Calendar.YEAR);
+		
 		final String LEAVE_1 = "วันลา";
 		// Set month
 		String[] month = { "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
 				"กันยายน", "ตุลาคม", "พฤษจิกายน", "ธันวาคม" };
 		int[] dayOfMonth29 = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 		int[] dayOfMonth28 = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-		
+		int year = Calendar.getInstance().get(Calendar.YEAR);
 		
 		// Get calendar
 		Calendar calendarDate = Calendar.getInstance();
@@ -282,7 +249,7 @@ public class ReportLeaveEmployee {
 		headerFont.setColor(IndexedColors.BLACK.getIndex());
 		headerFont.setBold(true);
 
-
+		
 		// Border
 		CellStyle border = workbook.createCellStyle();
 		border.setBorderTop(BorderStyle.THIN);
@@ -290,14 +257,18 @@ public class ReportLeaveEmployee {
 		border.setBorderLeft(BorderStyle.THIN);
 		border.setBorderRight(BorderStyle.THIN);
 
+		
+		CellStyle workTimesStyle = workbook.createCellStyle();
+		workTimesStyle.cloneStyleFrom(border);
+		workTimesStyle.setAlignment(HorizontalAlignment.CENTER);
+		
 		// Header style
 		CellStyle cellHeaderStyle = workbook.createCellStyle();
 		cellHeaderStyle.cloneStyleFrom(border);
 		cellHeaderStyle.setAlignment(HorizontalAlignment.CENTER);
 		cellHeaderStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		cellHeaderStyle.setFont(headerFont);
-		cellHeaderStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
-		cellHeaderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	
 		
 		// ------------------------------------------------------------------//
 
@@ -310,7 +281,53 @@ public class ReportLeaveEmployee {
 
 		List<String> enpNo = new ArrayList<String>();
 		List<String> nameList = new ArrayList<String>();
-		List<String> lastname = new ArrayList<String>();
+		List<String> lastname = new ArrayList<String>();// Sunday style
+		CellStyle colorRED1 = workbook.createCellStyle();
+		colorRED1.cloneStyleFrom(cellHeaderStyle);
+		colorRED1.setFillForegroundColor(IndexedColors.RED.getIndex());
+		colorRED1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Monday style
+		CellStyle colorYELLOW = workbook.createCellStyle();
+		colorYELLOW.cloneStyleFrom(cellHeaderStyle);
+		colorYELLOW.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+		colorYELLOW.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Tuesday style
+		CellStyle colorCORAL = workbook.createCellStyle();
+		colorCORAL.cloneStyleFrom(cellHeaderStyle);
+		colorCORAL.setFillForegroundColor(IndexedColors.CORAL.getIndex());
+		colorCORAL.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Wednesday style
+		CellStyle colorLIGHT_GREEN = workbook.createCellStyle();
+		colorLIGHT_GREEN.cloneStyleFrom(cellHeaderStyle);
+		colorLIGHT_GREEN.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+		colorLIGHT_GREEN.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Thursday style
+		CellStyle colorLIGHTORANGE = workbook.createCellStyle();
+		colorLIGHTORANGE.cloneStyleFrom(cellHeaderStyle);
+		colorLIGHTORANGE.setFillForegroundColor(IndexedColors.GOLD.getIndex());
+		colorLIGHTORANGE.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Friday style
+		CellStyle colorSKY_BLUE = workbook.createCellStyle();
+		colorSKY_BLUE.cloneStyleFrom(cellHeaderStyle);
+		colorSKY_BLUE.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+		colorSKY_BLUE.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Saturday style
+		CellStyle colorPLUM = workbook.createCellStyle();
+		colorPLUM.cloneStyleFrom(cellHeaderStyle);
+		colorPLUM.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
+		colorPLUM.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// Weekends style
+		CellStyle ColorLEMON = workbook.createCellStyle();
+		ColorLEMON.cloneStyleFrom(cellHeaderStyle);
+		ColorLEMON.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
+		ColorLEMON.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 		try {
 			// 1 connect database ดึงข้อมูลพนักงาน ได้แก่ empNo firstname lastname
@@ -353,14 +370,22 @@ public class ReportLeaveEmployee {
 				}
 				br.close();
 				// 7. ข้อมูลที่ได้มาอยู่ในรูปแบบ JSON {}
-
 				// header
-				XSSFRow rows = sheet.createRow(0); // ROW 1
-				XSSFCell cell0 = rows.createCell(0);
-				cell0.setCellValue("วันที่");
-				if (year % 4 == 0) {
+				Row dayNameRow = sheet.createRow(0);
+				XSSFRow rows = sheet.createRow(1); // ROW 1
+				
+				sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 0));
+				Cell empNoCellR00 = dayNameRow.createCell(0);
+				Cell empNoCellR01 = rows.createCell(0);
+				empNoCellR00.setCellValue("วันที่");
+				empNoCellR01.setCellStyle(cellHeaderStyle);
+				empNoCellR00.setCellStyle(cellHeaderStyle);
+				
+				
+				sheet.setColumnWidth(0, 25 * 250);
+				if (getYear % 4 == 0) {
 					for (int index = 0; index < dayOfMonth29[indexOfMonth]; index++) {
-						calendarDate.set(Calendar.YEAR, year);
+						calendarDate.set(Calendar.YEAR, getYear);
 						calendarDate.set(Calendar.MONTH, indexOfMonth);
 						calendarDate.set(Calendar.DAY_OF_MONTH, index);
 						Date date2 = calendarDate.getTime();
@@ -368,15 +393,49 @@ public class ReportLeaveEmployee {
 						int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 						String nameOfDay = "";
 						XSSFCell dayCell = rows.createCell(index + 1);
+						sheet.setColumnWidth(index+1, 25 * 250);
 						dayCell.setCellValue(index + 1);
-						sheet.setColumnWidth(index, 25 * 250);
-						sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, index + 1));
-						sheet.createFreezePane(0, 1);
 						dayCell.setCellStyle(cellHeaderStyle);
+						dayNameRow.setRowStyle(border);
+						
+						Cell dayNameCell = dayNameRow.createCell(index+1);
+						
+						if (dayOfWeek == 1) {
+							nameOfDay = "จันทร์";
+							dayNameCell.setCellStyle(colorYELLOW);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 2) {
+							nameOfDay = "อังคาร";
+							dayNameCell.setCellStyle(colorCORAL);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 3) {
+							nameOfDay = "พุธ";
+							dayNameCell.setCellStyle(colorLIGHT_GREEN);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 4) {
+							nameOfDay = "พฤหัสบดี";
+							dayNameCell.setCellStyle(colorLIGHTORANGE);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 5) {
+							nameOfDay = "ศุกร์";
+							dayNameCell.setCellStyle(colorSKY_BLUE);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 6) {
+							nameOfDay = "เสาร์";
+							dayNameCell.setCellStyle(colorPLUM);
+							dayCell.setCellStyle(ColorLEMON);
+						} else if (dayOfWeek == 7) {
+							nameOfDay = "อาทิตย์";
+							dayNameCell.setCellStyle(colorRED1);
+							dayCell.setCellStyle(ColorLEMON);
+						}
+						
+						dayNameCell.setCellValue(nameOfDay);
+						
 					}
 				} else {
 					for (int index = 0; index < dayOfMonth28[indexOfMonth]; index++) {
-						calendarDate.set(Calendar.YEAR, year);
+						calendarDate.set(Calendar.YEAR, getYear);
 						calendarDate.set(Calendar.MONTH, indexOfMonth);
 						calendarDate.set(Calendar.DAY_OF_MONTH, index);
 						Date date2 = calendarDate.getTime();
@@ -384,11 +443,44 @@ public class ReportLeaveEmployee {
 						int dayOfWeek = dayOfCalendar.get(Calendar.DAY_OF_WEEK);
 						String nameOfDay = "";
 						XSSFCell dayCell = rows.createCell(index + 1);
+						sheet.setColumnWidth(index+1, 25 * 250);
 						dayCell.setCellValue(index + 1);
-						sheet.setColumnWidth(index, 25 * 250);
-						sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, index + 1));
-						sheet.createFreezePane(0, 1);
 						dayCell.setCellStyle(cellHeaderStyle);
+						dayNameRow.setRowStyle(border);
+						
+						Cell dayNameCell = dayNameRow.createCell(index + 1);
+						
+						if (dayOfWeek == 1) {
+							nameOfDay = "จันทร์";
+							dayNameCell.setCellStyle(colorYELLOW);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 2) {
+							nameOfDay = "อังคาร";
+							dayNameCell.setCellStyle(colorCORAL);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 3) {
+							nameOfDay = "พุธ";
+							dayNameCell.setCellStyle(colorLIGHT_GREEN);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 4) {
+							nameOfDay = "พฤหัสบดี";
+							dayNameCell.setCellStyle(colorLIGHTORANGE);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 5) {
+							nameOfDay = "ศุกร์";
+							dayNameCell.setCellStyle(colorSKY_BLUE);
+							dayCell.setCellStyle(cellHeaderStyle);
+						} else if (dayOfWeek == 6) {
+							nameOfDay = "เสาร์";
+							dayNameCell.setCellStyle(colorPLUM);
+							dayCell.setCellStyle(ColorLEMON);
+						} else if (dayOfWeek == 7) {
+							nameOfDay = "อาทิตย์";
+							dayNameCell.setCellStyle(colorRED1);
+							dayCell.setCellStyle(ColorLEMON);
+						}
+						
+						dayNameCell.setCellValue(nameOfDay);
 					}
 				}
 
@@ -439,166 +531,264 @@ public class ReportLeaveEmployee {
 				
 				List<Integer> maxRow = new ArrayList<Integer>();
 				int maxRowDay=0;
-				
-				for (int columnIndex = 1; columnIndex <= 31; columnIndex++) {
-					if (columnIndex < 10) {
-						keyD = y +   m +"0"+ columnIndex;
-					} else {
-						keyD = y + m + columnIndex;
-					} 
-					List<String> mapsDay = leaveMaps.get(keyD);
+				if(getYear%4 == 0) {
+					for (int columnIndex = 1; columnIndex <= dayOfMonth29[indexOfMonth]; columnIndex++) {
+						if (columnIndex < 10) {
+							keyD = y +   m +"0"+ columnIndex;
+						} else {
+							keyD = y + m + columnIndex;
+						} 
+						List<String> mapsDay = leaveMaps.get(keyD);
 
-					if (mapsDay != null) {
-						for (int rowIndex = 0; rowIndex < mapsDay.size(); rowIndex++) { 
-							String nameLeave =mapsDay.get(rowIndex);
-							//cut select type
-							//System.out.println(nameLeave.substring(nameLeave.indexOf(",")+1));
-							String type = nameLeave.substring(nameLeave.indexOf(",")+1).toString();
-							nameLeave=nameLeave.substring(nameLeave.indexOf("/")+1,nameLeave.indexOf(","));
-							XSSFRow rowD = sheet.getRow(rowIndex + 1);
-							
-							if (rowD == null) {
-								rowD = sheet.createRow(rowIndex + 1);
-							}
-							
-							Cell celldata = rowD.createCell(columnIndex);
-							switch (type) {
-							 	case "VACA":
-							 	celldata.setCellStyle(colorGreen);
-								 celldata.setCellValue(nameLeave);
-								
-								break;
-							 	case "SICK":
-								 celldata.setCellStyle(colorYellow);
-								 celldata.setCellValue(nameLeave);
-								break;
-							 	case "PERS":
-								 celldata.setCellStyle(colorLIGHT_BLUE);
-								 celldata.setCellValue(nameLeave);
-								 break;
-								 
-							 	case "MARR": 
-								 celldata.setCellStyle(colorPink);
-								 celldata.setCellValue(nameLeave);
-								 break;
-								default: 
-									celldata.setCellStyle(colorOther);
-									 celldata.setCellValue(nameLeave);
-									break;
-						 }
-							 
-							if(rowIndex==(mapsDay.size()-1)) {
-								if(maxRowDay<rowIndex) {
-									maxRowDay=rowIndex+1;
+						if (mapsDay != null) {
+							for (int rowIndex = 0; rowIndex < mapsDay.size(); rowIndex++) { 
+								String nameLeave =mapsDay.get(rowIndex);
+								//cut select type
+								//System.out.println(nameLeave.substring(nameLeave.indexOf(",")+1));
+								String type = nameLeave.substring(nameLeave.indexOf(",")+1).toString();
+								nameLeave=nameLeave.substring(nameLeave.indexOf("/")+1,nameLeave.indexOf(","));
+								XSSFRow rowD = sheet.getRow(rowIndex + 2);
+					
+								if (rowD == null) {
+									rowD = sheet.createRow(rowIndex + 2);
+									rowD.setRowStyle(border);
 								}
 								
-								maxRow.add(rowIndex+1);
+								Cell celldata = rowD.createCell(columnIndex);
+								celldata.setCellStyle(border);
+						
+								
+								switch (type) {
+								 	case "VACA":
+								 	celldata.setCellStyle(border);
+								 	celldata.setCellStyle(colorGreen);
+									 celldata.setCellValue(nameLeave);
+									
+									break;
+								 	case "SICK":
+								 		celldata.setCellStyle(border);
+									 celldata.setCellStyle(colorYellow);
+									 celldata.setCellValue(nameLeave);
+									break;
+								 	case "PERS":
+								 		celldata.setCellStyle(border);
+									 celldata.setCellStyle(colorLIGHT_BLUE);
+									 celldata.setCellValue(nameLeave);
+									 break;
+									 
+								 	case "MARR": 
+								 		celldata.setCellStyle(border);
+									 celldata.setCellStyle(colorPink);
+									 celldata.setCellValue(nameLeave);
+									 break;
+									default: 
+										celldata.setCellStyle(border);
+										celldata.setCellStyle(colorOther);
+										 celldata.setCellValue(nameLeave);
+									break;
+							 }
+								if(rowIndex==(mapsDay.size()-1)) {
+									if(maxRowDay<rowIndex) {
+										maxRowDay=rowIndex+1;
+									}
+									
+									maxRow.add(rowIndex+1);
+								}
 							}
+							
+						}else {
+							maxRow.add(0);
 						}
 						
-					}else {
-						maxRow.add(0);
-					}
+		
+					} 
 					
+				}else {
+					for (int columnIndex = 1; columnIndex <= dayOfMonth28[indexOfMonth]; columnIndex++) {
+						if (columnIndex < 10) {
+							keyD = y +   m +"0"+ columnIndex;
+						} else {
+							keyD = y + m + columnIndex;
+						} 
+						List<String> mapsDay = leaveMaps.get(keyD);
+
+						if (mapsDay != null) {
+							for (int rowIndex = 0; rowIndex < mapsDay.size(); rowIndex++) { 
+								String nameLeave =mapsDay.get(rowIndex);
+								//cut select type
+								//System.out.println(nameLeave.substring(nameLeave.indexOf(",")+1));
+								String type = nameLeave.substring(nameLeave.indexOf(",")+1).toString();
+								nameLeave=nameLeave.substring(nameLeave.indexOf("/")+1,nameLeave.indexOf(","));
+								XSSFRow rowD = sheet.getRow(rowIndex + 2);
+							
+								
+								if (rowD == null) {
+									rowD = sheet.createRow(rowIndex + 2);
+									rowD.setRowStyle(border);
+								}
+								Cell celldata = rowD.createCell(columnIndex);
+								celldata.setCellStyle(border);
+								
+							
+								switch (type) {
+								 	case "VACA":
+
+									 celldata.setCellValue(nameLeave);
+									 celldata.setCellStyle(workTimesStyle);
+									 celldata.setCellStyle(colorGreen);
+									break;
+								 	case "SICK":
+								 		
+									 
+									 celldata.setCellValue(nameLeave);
+									 celldata.setCellStyle(workTimesStyle);
+									 celldata.setCellStyle(colorYellow);
+									break;
+								 	case "PERS":
 	
-				} 
-//			//set label
-//				
-//						XSSFRow rowLabel1 = sheet.createRow(2);
+									 celldata.setCellValue(nameLeave);
+									 celldata.setCellStyle(workTimesStyle);
+									 celldata.setCellStyle(colorLIGHT_BLUE);
+									 break;
+									 
+								 	case "MARR": 
+								 		
+									
+									 celldata.setCellValue(nameLeave);
+									 celldata.setCellStyle(colorPink);
+									 celldata.setCellStyle(workTimesStyle);
+									 break;
+									default: 
+										 celldata.setCellValue(nameLeave);
+										 celldata.setCellStyle(colorOther);
+										 celldata.setCellStyle(workTimesStyle);
+										break;
+							 }
+								if(rowIndex==(mapsDay.size()-1)) {
+									if(maxRowDay<rowIndex) {
+										maxRowDay=rowIndex+1;
+									}
+									
+									maxRow.add(rowIndex+1);
+								}
+							}
+							
+						}else {
+							maxRow.add(0);
+						}
+						
+		
+					} 
+				}
+				
+
 						XSSFRow rowLabel1 = sheet.getRow(2);
 						if(rowLabel1==null) {
 							 rowLabel1=sheet.createRow(2);
+							 rowLabel1.setRowStyle(border);
+							 
 						}
 						Cell cellLabel1 = rowLabel1.createCell(0);
 						cellLabel1.setCellStyle(colorGreen);
 						cellLabel1.setCellValue("ลาพักผ่อน");
 						
-//						XSSFRow rowLabel2 = sheet.createRow(3);
+
 						XSSFRow rowLabel2 = sheet.getRow(3);
 						if(rowLabel2==null) {
 							 rowLabel2=sheet.createRow(3);
+							 rowLabel1.setRowStyle(border);
 						}
 						Cell cellLabel2 = rowLabel2.createCell(0);
 						cellLabel2.setCellStyle(colorLIGHT_BLUE);
 						cellLabel2.setCellValue("ลากิจ");
 						
 						
-//						XSSFRow rowLabel3 = sheet.createRow(4);
+
 						XSSFRow rowLabel3 = sheet.getRow(4);
 						if(rowLabel3==null) {
 							 rowLabel3=sheet.createRow(4);
+							 rowLabel1.setRowStyle(border);
 						}
 						Cell cellLabel3 = rowLabel3.createCell(0);
 						cellLabel3.setCellStyle(colorYellow);
 						cellLabel3.setCellValue("ลาป่วย");
 						
-//						XSSFRow rowLabel4 = sheet.createRow(5);
+
 						XSSFRow rowLabel4 = sheet.getRow(5);
 						if(rowLabel4==null) {
 							rowLabel4=sheet.createRow(5);
+							rowLabel1.setRowStyle(border);
 						}							
 						Cell cellLabel4 = rowLabel4.createCell(0);
 						cellLabel4.setCellStyle(colorPink);
 						cellLabel4.setCellValue("ลาสมรส");
 
-//						XSSFRow rowLabel5 = sheet.createRow(6);
+
 						XSSFRow rowLabel5 = sheet.getRow(6);
 						if(rowLabel5==null) {
 							 rowLabel5=sheet.createRow(6);
+							 rowLabel1.setRowStyle(border);
 						}
 						Cell cellLabel5 = rowLabel5.createCell(0);
 						cellLabel5.setCellStyle(colorOther);
 						cellLabel5.setCellValue("อื่นๆ");
 						
 						
-			for(int columnMax=0;columnMax<maxRow.size();columnMax++) {
+			for(int columnMax=0;columnMax<maxRow.size()+1;columnMax++) {
 					if(maxRowDay>8) {
-						XSSFRow rowMaxD = sheet.getRow(maxRowDay);
+						XSSFRow rowMaxD = sheet.getRow(maxRowDay+1);
+						
 						if(rowMaxD==null) {
-							rowMaxD = sheet.createRow(maxRowDay);
+							rowMaxD = sheet.createRow(maxRowDay+1);
+							rowMaxD.setRowStyle(border);
 						}
+						
 						Cell cellDataMax = rowMaxD.createCell(columnMax);
+					
+						
 						if ((columnMax)==0) {
-							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 							cellDataMax.setCellValue("รวมทั้งหมด");
+							cellDataMax.setCellStyle(workTimesStyle);
+							cellDataMax.setCellStyle(colorLIGHT_BLUE);
+							
 						}else {
+							
 							cellDataMax.setCellValue(maxRow.get(columnMax-1));
+							cellDataMax.setCellStyle(workTimesStyle);
+							cellDataMax.setCellStyle(colorLIGHT_BLUE);
+							
 						}
 					}else {
-						XSSFRow rowMaxD = sheet.getRow(8);
+						XSSFRow rowMaxD = sheet.getRow(8+1);
+						
 						if(rowMaxD==null) {
-							rowMaxD = sheet.createRow(8);
+							rowMaxD = sheet.createRow(8+1);
+							rowMaxD.setRowStyle(border);
 						}
+
 						Cell cellDataMax = rowMaxD.createCell(columnMax);
+						
 						if ((columnMax)==0) {
-							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 							cellDataMax.setCellValue("รวมทั้งหมด");
+							cellDataMax.setCellStyle(workTimesStyle);
+							cellDataMax.setCellStyle(colorLIGHT_BLUE);
+						
 													
 						}else {
-							cellDataMax.setCellStyle(colorLIGHT_BLUE);
 							cellDataMax.setCellValue(maxRow.get(columnMax-1));
+							cellDataMax.setCellStyle(workTimesStyle);
+							cellDataMax.setCellStyle(colorLIGHT_BLUE);
+							
 								
 						}
 					}
 				}
 		
 				//System.out.println(leaveMaps.get(keyD));
-				
-
-	       
-			
 
 			} else {
 				System.out.println("{}");
-			}
-
-//			FileOutputStream outputStream = new FileOutputStream(".\\datafiles\\report.xlsx");
-//			workbook.write(outputStream);
-//			outputStream.close();
-//
-//			System.out.println("Employee.xls is Create Success :");
-			
-			
+			}			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
