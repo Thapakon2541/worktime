@@ -676,7 +676,7 @@ public class ReportLeaveEmployee {
 						
 						
 
-						XSSFRow rowLabel1 = sheet.getRow(1);
+						XSSFRow rowLabel1 = sheet.getRow(2);
 			
 						Cell cellLabel1 = rowLabel1.createCell(0);
 						cellLabel1.setCellStyle(colorGreen);
